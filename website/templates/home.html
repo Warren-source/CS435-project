@@ -1,0 +1,28 @@
+<!--the jinja lets us inherit the base.html format-->
+{% extends "base.html" %}
+{% block title %} Your Items {% endblock %}
+
+{% block content %}
+
+
+<ul class="list-group list-group-flush" id="sellers">
+  {% for seller in user.sellers %}
+  <li class="list-group-item">
+    {{ seller.item }}
+  </li>
+  {% endfor %}
+</ul>
+
+
+
+<h3 align="center">Sell New Item</h3>
+<!--this is for adding new items-->
+<form method="POST">
+  <textarea name="seller" id="seller" class="form-control"></textarea>
+
+    <br />
+    <div align="center">
+        <button type="submit" class="btn btn-primary">Add New Item</button>
+    </div>
+</form>
+{% endblock %}
