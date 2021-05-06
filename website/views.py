@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request
+from flask import Blueprint, render_template, request, flash, redirect, url_for
 from flask_login import login_required, current_user
 from .models import Seller
 from . import db
@@ -11,18 +11,19 @@ views = Blueprint('views', __name__)
 @login_required
 def home():
     if request.method == 'POST':
-        item = request.form.get('item')
+        food = request.form.get('food')
         description = request.form.get('description')
         expiration = request.form.get('expiration')
         
-        if len(item) < 1:
-            flash('please insert item', category='error')
+        if len(food) < 1:
+            flash('please insert food', category='error')
         elif len(description) < 1:
             flash('please give a description', category='error')
         elif len(expiration) < 1:
             flash('please give an expiration date', category='error')
         else:
-            new_seller = Seller(item=item, description=description, expired=expiration, user_id=current_user.id)
+            new_seller = Seller(food=food, description=description, expiration=expiration, user_id=current_user.id)
+            print()
             db.session.add(new_seller)
             db.session.commit()
             flash('Item added', category='success')

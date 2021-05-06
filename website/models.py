@@ -5,10 +5,10 @@ from sqlalchemy.sql import func #deals with date creation for us
 
 class Seller(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    item = db.Column(db.String(100))
+    food = db.Column(db.String(100))
     #date = db.Column(db.DateTime(timezone=True), default=func.now())
     description = db.Column(db.String(600))
-    expired = db.Column(db.String(30))
+    expiration = db.Column(db.String(30))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
 #define the User table

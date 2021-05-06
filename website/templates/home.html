@@ -5,24 +5,44 @@
 {% block content %}
 
 
-<ul class="list-group list-group-flush" id="sellers">
-  {% for seller in user.sellers %}
-  <li class="list-group-item">
-    {{ seller.item }}
-  </li>
-  {% endfor %}
-</ul>
-
 
 
 <h3 align="center">Sell New Item</h3>
 <!--this is for adding new items-->
 <form method="POST">
-  <textarea name="seller" id="seller" class="form-control"></textarea>
-
-    <br />
-    <div align="center">
-        <button type="submit" class="btn btn-primary">Add New Item</button>
-    </div>
+  <div class="form-group">
+    <label for="food">Insert Item</label>
+    <input
+      type="text"
+      class="form-control"
+      id="food"
+      name="food"
+      placeholder="Enter Item"
+    />
+  </div>
+  <!--ask user for first name-->
+  <div class="form-group">
+    <label for="description">Description</label>
+    <input
+      type="text"
+      class="form-control"
+      id="description"
+      name="description"
+      placeholder="Enter description"
+    />
+  </div>
+  <!--ask user for password-->
+  <div class="form-group">
+    <label for="expiration">Expiration date</label>
+    <input
+      type="text"
+      class="form-control"
+      id="expiration"
+      name="expiration"
+      placeholder="Enter expiration date"
+    />
+  </div>
+  <br />
+  <button type="submit" class="btn btn-primary">Submit</button>
 </form>
 {% endblock %}
