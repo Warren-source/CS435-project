@@ -2,52 +2,57 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<script src="js/script.js"></script>
-    <link rel="stylesheet" href="./css/lgin.css">
-</head>
-<body>
-
-<button onclick="document.getElementById('id01').style.display='block'" style="width:auto;">Login</button>
-<div id="id01" class="modal">
-  
-  <form class="modal-content animate" action="/action_page.php" method="post">
-    <div class="imgcontainer">
-      <span onclick="document.getElementById('id01').style.display='none'" class="close" title="Close Modal">&times;</span>
-      <img src="wordpress-custom-login-page-form.png" alt="Avatar" class="avatar">
-    </div>
-
-    <div class="container">
-      <label for="uname"><b>Username</b></label>
-      <input type="text" placeholder="Enter Username" name="uname" required>
-
-      <label for="psw"><b>Password</b></label>
-      <input type="password" placeholder="Enter Password" name="psw" required>
-        
-      <button type="submit">Login</button>
-      <label>
-        <input type="checkbox" checked="checked" name="remember"> Remember me
-      </label>
-    </div>
-
-    <div class="container" style="background-color:#f1f1f1">
-      <button type="button" onclick="document.getElementById('id01').style.display='none'" class="cancelbtn">Cancel</button>
-      <span class="psw">Forgot <a href="#">password?</a></span>
-    </div>
-  </form>
-</div>
-
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<link rel="stylesheet" href="./css/lgin.css">
 <script>
-// Get the modal
-var modal = document.getElementById('id01');
+    $(document).ready(function(){
+        $(".login-form").hide();
+        $(".login").css("background", "none");
 
-// When the user clicks anywhere outside of the modal, close it
-window.onclick = function(event) {
-    if (event.target == modal) {
-        modal.style.display = "none";
-    }
-}
+        $(".login").click(function(){
+        $(".signup-form").hide();
+        $(".login-form").show();
+        $(".signup").css("background", "none");
+        $(".login").css("background", "#fff");
+        });
+
+        $(".signup").click(function(){
+        $(".signup-form").show();
+        $(".login-form").hide();
+        $(".login").css("background", "none");
+        $(".signup").css("background", "#fff");
+        });
+
+        $(".btn").click(function(){
+        $(".input").val("");
+        });
+    })
 </script>
+</head>
 
+    <body>
+        <div class="wrapper">
+            <div class="container">
+              
+              <div class="signup">Sign Up</div>
+              <div class="login">Log In</div>
+              
+               <div class="signup-form">
+                  <input type="text" placeholder="Your Email Address" class="input"><br />
+                  <input type="text" placeholder="Choose a Username" class="input"><br />
+                  <input type="password" placeholder="Choose a Password" class="input"><br />
+                  <div class="btn">Create account</div>
+               </div>
+              
+              <div class="login-form">
+                  <input type="text" placeholder="Email or Username" class="input"><br />
+                  <input type="password" placeholder="Password" class="input"><br />
+                  <div class="btn">log in</div>
+               </div>
+              
+            </div>
+          </div>
+            
 </body>
 </html>
 
