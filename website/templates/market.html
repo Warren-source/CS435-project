@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block title %} Items For Sale {% endblock %}
+
+{% block content %}
+
+    
+<form method="POST">
+    <h3 align="center">Search for an Item</h3>
+    <!--user enters email-->
+    <div class="form-group">
+    <label for="searchfood">Food</label>
+    <input
+      type="text"
+      class="form-control"
+      id="searchfood"
+      name="searchfood"
+      placeholder="Enter item to search"
+    />
+    </div>
+    <button type="submit" class="btn btn-primary">Search</button>
+</form>
+
+<div class="content">
+    <h1 style="text-align: center">Search Results</h1>
+    <table>
+        <tr>
+            <th>Item</th>
+            <th>Description</th>
+            <th>Expiration</th>
+        </tr>
+        
+        {% for searchresult in searchresults %}
+        <tr>
+            <td>{{ searchresult.food  }}</td>
+            <td>{{ searchresult.description }}</td>
+            <td>{{ searchresult.expiration }}</td>
+        </tr>
+    {% endfor %}
+    </table>
+</div>
+
+<div class="content">
+    <h1 style="text-align: center">All Items</h1>
+    <table>
+        <tr>
+            <th>Item</th>
+            <th>Description</th>
+            <th>Expiration</th>
+        </tr>
+        {% for seller in seller %}
+            <tr>
+                <td>{{ seller.food  }}</td>
+                <td>{{ seller.description }}</td>
+                <td>{{ seller.expiration }}</td>
+                <td>
+                  <a href="/delete/{{seller.id}}">Delete</a>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+</div>
+        
+{% endblock %}

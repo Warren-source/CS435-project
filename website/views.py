@@ -6,6 +6,18 @@ from . import db
 views = Blueprint('views', __name__)
 #blueprint means it has a bunch of routes inside of it
 
+#this just displays the market
+@views.route('/market', methods=['GET', 'POST'])
+@login_required
+def market():
+    if request.method == 'POST':
+        food_item = request.form.get('searchfood')
+        #don't do error checks, some boxes can be empty
+        searchresults = Seller.query.filter_by(food=food_item)
+        return render_template("market.html", user=current_user, searchresults=searchresults)
+
+    return render_template("market.html", user=current_user, seller=Seller.query.all())
+
 #views is Blueprint, route to home page
 @views.route('/', methods=['GET', 'POST'])
 @login_required
@@ -23,10 +35,27 @@ def home():
             flash('please give an expiration date', category='error')
         else:
             new_seller = Seller(food=food, description=description, expiration=expiration, user_id=current_user.id)
-            print()
             db.session.add(new_seller)
             db.session.commit()
             flash('Item added', category='success')
             return redirect(url_for('views.home'))
             
     return render_template("home.html", user=current_user)#so we can check if authenticated
+
+@views.route('/delete/<int:id>')
+def delete(id):
+    seller_to_delete = Seller.query.get_or_404(id)
+
+    if seller_to_delete.user_id == current_user.id:
+        try:
+            db.session.delete(seller_to_delete)
+            db.session.commit()
+            flash('Item deleted', category='success')
+            return redirect(url_for('views.market'))
+        except:
+            flash('Technical problem with deleting item', category='error')
+            return redirect(url_for('views.home'))
+    else:
+        flash('You can only delete your posted items', category='error')
+        return redirect(url_for('views.market'))
+
