@@ -3,7 +3,31 @@
 
 {% block content %}
 
-    
+<!--make table prettier-->
+<style>
+    table {
+        border-collapse: collapse;
+    }
+    th {
+        background-color:#333338;
+        Color:white;
+    }
+    th, td {
+        width:250px;
+        text-align:center;
+        border:1px solid black;
+        padding:5px
+      
+    }
+    .geeks {
+        border-right:hidden;
+    }
+    .gfg {
+        border-collapse:separate;
+        border-spacing:0 15px;
+    }
+</style>
+
 <form method="POST">
     <h3 align="center">Search for an Item</h3>
     <!--user enters email-->
@@ -49,6 +73,7 @@
             <th>Price</th>
             <th>Description</th>
             <th>Expiration</th>
+            <th>Option</th>
         </tr>
         {% for seller in seller %}
             <tr>
