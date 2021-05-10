@@ -1,6 +1,6 @@
-<!DOCTYPE html>
-
-<head>
+{% extends "base.html" %}
+{% block title %} About Page {% endblock %}
+<!-- <head>
     <title>Web Dev - Hunger Home Page</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -10,23 +10,12 @@
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Ballet&display=swap" rel="stylesheet">
 
-    <script src="js/script.js"></script>
-    <link rel="stylesheet" href="./css/style.css">
-</head>
+    <script src="static/script.js"></script>
+    <link rel="stylesheet" href="./static/style.css">
+</head> -->
 
-<body>
-    <header id="header">
-        <h1 class="title"><a href="index.html">Reduce Food Waste</a></h1>
-        <nav class="nav-menu">
-            <ul>
-                <li class="active"><a href="index.html">Home</a></li>
-                <li><a href="/cart">Cart</a></li>
-                <li><a href="login.html">Login</a></li>
-                <li><input type="text" placeholder="Search.."><input type="submit" value="Submit"></li>
+{% block content %}
     
-            </ul>
-        </nav>
-    </header>
     <div id="myCarousel" class="carousel slide" data-ride="carousel">
         <!-- Indicators -->
         <ol class="carousel-indicators">
@@ -96,6 +85,6 @@
             <a href="https://www.mercycorps.org/blog/what-were-doing-end-global-hunger">mercycorps.org</a></p>
     </div>
         
-</body>
+    {% endblock %}
 
-</html>
+

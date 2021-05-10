@@ -9,6 +9,11 @@ views = Blueprint('views', __name__)
 # this just displays the market
 
 
+@views.route('/about', methods=['GET'])
+def about():
+    return render_template("about.html", user=current_user)
+
+
 @views.route('/market', methods=['GET', 'POST'])
 @login_required
 def market():
