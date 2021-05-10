@@ -1,6 +1,9 @@
 {% extends "base.html" %}
 {% block title %} About Page {% endblock %}
-<!-- <head>
+
+{% block content %}
+
+<head>
     <title>Web Dev - Hunger Home Page</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -12,10 +15,9 @@
 
     <script src="static/script.js"></script>
     <link rel="stylesheet" href="./static/style.css">
-</head> -->
+</head>
 
-{% block content %}
-    
+<body>
     <div id="myCarousel" class="carousel slide" data-ride="carousel">
         <!-- Indicators -->
         <ol class="carousel-indicators">
@@ -84,7 +86,8 @@
                 href="https://www.worldhunger.org/world-hunger-and-poverty-facts-and-statistics/">worldhunger.org</a>,
             <a href="https://www.mercycorps.org/blog/what-were-doing-end-global-hunger">mercycorps.org</a></p>
     </div>
-        
+  </body> 
+
     {% endblock %}
 
 

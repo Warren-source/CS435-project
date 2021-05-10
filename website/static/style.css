@@ -49,38 +49,6 @@ h6 {
 }
 
 /*--------------------------------------------------------------
-    # Navigation Menu
-    --------------------------------------------------------------*/
-
-.nav-menu ul {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.nav-menu > ul {
-  display: flex;
-}
-
-.nav-menu > ul > li {
-  white-space: nowrap;
-  padding: 14px 0 14px 28px;
-}
-
-.nav-menu a {
-  color: #124265;
-  transition: 0.3s;
-  font-size: 14px;
-  font-family: "Open Sans", sans-serif;
-}
-
-.nav-menu a:hover,
-.nav-menu .active > a,
-.nav-menu li:hover > a {
-  color: #2487ce;
-}
-
-/*--------------------------------------------------------------
     # Carousel
     --------------------------------------------------------------*/
 
@@ -126,13 +94,6 @@ h3 {
 
 .bot-btn {
   margin-right: 20px;
-}
-
-.footer {
-  position: absolute;
-  padding-left: 100px;
-  bottom: 0;
-  width: 100%;
 }
 
 .click {
