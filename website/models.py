@@ -35,4 +35,5 @@ class User(db.Model, UserMixin):
     #also quantity for seller
     #note: make it impossible to see your own items in general items list
     #note, make buyer history and seller history, since that's what we'll display anyway
+    #and just have username of the other guy, they don't need to know the guy's id
     

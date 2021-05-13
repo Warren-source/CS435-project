@@ -20,7 +20,7 @@ def market():
     if request.method == 'POST':
         food_item = request.form.get('searchfood')
         # don't do error checks, some boxes can be empty
-        searchresults = db.session.execute('SELECT S.id, S.food, S.price, S.description, S.expiration, U.user_name, U.address, U.zipcode, U.phone FROM Seller AS S JOIN User AS U WHERE S.food = :val', {'val': food_item})
+        searchresults = db.session.execute('SELECT S.id, S.food, S.price, S.description, S.expiration, U.user_name, U.address, U.zipcode, U.phone FROM Seller AS S JOIN User AS U WHERE U.id = S.user_id AND S.food = :val', {'val': food_item})
         #searchresults = Seller.query.filter_by(food=food_item) #okay so search results need to give full table
         return render_template("market.html", user=current_user, searchresults=searchresults)
 
