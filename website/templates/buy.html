@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% block title %} Items For Sale {% endblock %}
+
+{% block content %}
+
+<!--okay, so I have the selling item's id
+    might be good idea to have user's id passed here too
+    so i should have the item displayed here
+    so the user will see their purchase
+    then simply ask for a credit card-->
+<!--make table prettier-->
+<style>
+    table {
+        border-collapse: collapse;
+    }
+    th {
+        background-color:#333338;
+        Color:white;
+    }
+    th, td {
+        width:250px;
+        text-align:center;
+        border:1px solid black;
+        padding:5px
+      
+    }
+    .geeks {
+        border-right:hidden;
+    }
+    .gfg {
+        border-collapse:separate;
+        border-spacing:0 15px;
+    }
+</style>
+
+    <div class="summary">
+        <h1 style="text-align: center">Item flagged for Seller</h1>
+        <table>  
+            <tr>
+                <th>Seller</th>
+                <th>Phone</th>
+                <th>Item</th>
+                <th>Price</th>
+                <th>Description</th>
+                <th>Expiration</th>
+                <th>Address</th>
+                
+            </tr>
+            
+            {% for item in seller_item %}
+            
+            <tr>
+                <td>{{ item.user_name }}</td>
+                <td>{{ item.phone }}</td>
+                <td>{{ item.food }}</td>
+                <td>{{ item.price }}</td>
+                <td>{{ item.description }}</td>
+                <td>{{ item.expiration }}</td>
+                <td>{{ item.address }}</td>
+            </tr>
+    
+            {% endfor %}
+            
+        </table>
+    </div>
+
+
+<p> 
+    Thank you for your interest in this item. Please wait to
+    be contacted by the seller to arrange a time and place to meet and exchange.
+</p>    
+
+
+{% endblock %}

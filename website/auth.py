@@ -16,12 +16,12 @@ auth = Blueprint('auth', __name__)
 #this receives GET and POST
 @auth.route('/login', methods=['GET','POST'])
 def login():
-    #if there's a post from submit button, check if email and password match
+    #if there's a post from submit button, check if user name and password match
     if request.method == 'POST':
-        email = request.form.get('email')
+        user_name = request.form.get('userName')
         password = request.form.get('password')
-        #search the table user by email
-        user = User.query.filter_by(email=email).first()
+        #search the table user by user name
+        user = User.query.filter_by(user_name=user_name).first()
         if user:
             if check_password_hash(user.password, password):
                 flash('Logged in', category='success')
@@ -30,7 +30,7 @@ def login():
             else:
                 flash('Incorrect password', category='error')
         else:
-            flash('Incorrect email', category='error')
+            flash('Incorrect user name', category='error')
 
     return render_template("login.html", user=current_user)
 
@@ -46,27 +46,35 @@ def sign_up():
     #if request method is a post, set a bunch of variables
     #to the fields
     if request.method =='POST':
-        email = request.form.get('email')
-        first_name = request.form.get('firstName')
+        user_name = request.form.get('userName')
         password1 = request.form.get('password1')
         password2 = request.form.get('password2')
+        address = request.form.get('address')
+        zipcode = request.form.get('zipcode')
+        phone = request.form.get('phone')
         #this is just to check if the info submitted is all there
         #and the passwords match
         #we must first check if the user already exists
-        user = User.query.filter_by(email=email).first()
+        user = User.query.filter_by(user_name=user_name).first()
+
         if user:
-            flash('Account already exists with this email', category='error')
-        elif len(email) < 1:
-            flash('Please fill in email', category='error')
-        elif len(first_name) < 1:
-            flash('Please fill in first name', category='error')
+            flash('This username is already taken', category='error')
+        elif len(user_name) < 1:
+            flash('Please fill in user name', category='error')
         elif len(password1) < 1:
             flash ('Please create a password', category='error')
         elif password1 != password2:
             flash('Passwords must match', category='error')
+        elif len(address) < 5:
+            flash('Please give an address', category='error')
+        elif len(zipcode) < 5:
+            flash('Please give a zip code', category='error')
+        elif len(phone) < 10:
+            flash('Please give a valid phone number', category='error')
         else:
             #create user, and redirect them to home page
-            new_user = User(email=email, first_name=first_name, password=generate_password_hash(password1, method='sha256'))
+            new_user = User(user_name=user_name, password=generate_password_hash(password1, method='sha256'),
+                            address=address, zipcode=zipcode, phone=phone)
             db.session.add(new_user)
             db.session.commit()
             login_user(new_user, remember=True)
