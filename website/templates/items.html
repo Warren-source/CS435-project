@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block title %} Items For Sale {% endblock %}
+
+{% block content %}
+
+<!--make table prettier-->
+<style>
+    table {
+        border-collapse: collapse;
+    }
+    th {
+        background-color:#333338;
+        Color:white;
+    }
+    th, td {
+        width:250px;
+        text-align:center;
+        border:1px solid black;
+        padding:5px
+      
+    }
+    .geeks {
+        border-right:hidden;
+    }
+    .gfg {
+        border-collapse:separate;
+        border-spacing:0 15px;
+    }
+</style>
+
+<div class="myitems">
+    <h1 style="text-align: center">Your Items</h1>
+    <table>
+        <tr>
+            <th>Item</th>
+            <th>Price</th>
+            <th>Description</th>
+            <th>Expiration</th>
+            <th>Option</th>
+        </tr>
+        {% for stuff in my_stuff %}
+        <tr>
+            <td>{{ stuff.food  }}</td>
+            <td>{{ stuff.price  }}</td>
+            <td>{{ stuff.description }}</td>
+            <td>{{ stuff.expiration }}</td>
+             <!--note maybe supply custom tables form backend-->
+            <td>
+                <a href="/delete/{{stuff.id}}">Delete</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+
+{% endblock %}
