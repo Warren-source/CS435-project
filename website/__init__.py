@@ -23,7 +23,7 @@ def create_app():
     app.register_blueprint(views, url_prefix='/')
     app.register_blueprint(auth, url_prefix='/')
 
-    from .models import User, Seller
+    from .models import User, Item, Buyer, Seller, Cart, Location
 
     create_database(app)
 
@@ -32,7 +32,7 @@ def create_app():
     login_manager.init_app(app)
 
     @login_manager.user_loader
-    def load_user(id):
+    def load_user(id): #okay, we do it by username, right, since we can search both tables
         return User.query.get(int(id))  # look for user based on id
 
     return app
