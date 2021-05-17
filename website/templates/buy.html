@@ -1,13 +1,10 @@
 {% extends "base.html" %}
-{% block title %} Items For Sale {% endblock %}
+{% block title %} Shopping Cart {% endblock %}
 
 {% block content %}
 
-<!--okay, so I have the selling item's id
-    might be good idea to have user's id passed here too
-    so i should have the item displayed here
-    so the user will see their purchase
-    then simply ask for a credit card-->
+<!--this is to show the user's shopping cart, where they can finalize their
+    purchase-->
 <!--make table prettier-->
 <style>
     table {
@@ -32,31 +29,35 @@
         border-spacing:0 15px;
     }
 </style>
-
+    <!--the backend, views.py, feeds this page a table with the items' and seller's info-->
     <div class="summary">
-        <h1 style="text-align: center">Item flagged for Seller</h1>
+        <h1 style="text-align: center">Shopping Cart</h1>
         <table>  
             <tr>
                 <th>Seller</th>
                 <th>Phone</th>
                 <th>Item</th>
                 <th>Price</th>
-                <th>Description</th>
-                <th>Expiration</th>
                 <th>Address</th>
+                <th>Town</th>
+                <th>State</th>
+                <th>Option</th>
                 
             </tr>
             
-            {% for item in seller_item %}
+            {% for item in my_cart %}
             
             <tr>
                 <td>{{ item.user_name }}</td>
                 <td>{{ item.phone }}</td>
                 <td>{{ item.food }}</td>
                 <td>{{ item.price }}</td>
-                <td>{{ item.description }}</td>
-                <td>{{ item.expiration }}</td>
                 <td>{{ item.address }}</td>
+                <td>{{ item.town }}</td>
+                <td>{{ item.state }}</td>
+                <td>
+                    <a href="/checkout/{{item.id}}">Checkout</a>
+                </td>
             </tr>
     
             {% endfor %}
@@ -64,10 +65,12 @@
         </table>
     </div>
 
+    
+
 
 <p> 
-    Thank you for your interest in this item. Please wait to
-    be contacted by the seller to arrange a time and place to meet and exchange.
+    To finalize any purchases, please checkout the item
+    and contact seller for pickup.
 </p>    
 
 
