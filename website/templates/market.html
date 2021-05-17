@@ -91,42 +91,17 @@
 </div>
 {% else %}
 
-<!--this displays all the user's items they are selling, with the option to delete them-->
-<div class="myitems">
-    <h1 style="text-align: center">Your Items</h1>
-    <table>
-        <tr>
-            <th>Item</th>
-            <th>Price</th>
-            <th>Description</th>
-            <th>Expiration</th>
-            <th>Option</th>
-        </tr>
-        {% for stuff in my_stuff %}
-        <tr>
-            <td>{{ stuff.food  }}</td>
-            <td>{{ stuff.price  }}</td>
-            <td>{{ stuff.description }}</td>
-            <td>{{ stuff.expiration }}</td>
-            <td>
-                <a href="/delete/{{stuff.id}}">Delete</a>
-            </td>
-        </tr>
-        {% endfor %}
-    </table>
-</div>
-
 <!--this displays the general market, with the option to purchase-->
 <div class="allitems">
     <h1 style="text-align: center">All Items</h1>
     <table>
         <tr>
-            <th>Seller</th>
-            <th>Phone</th>
             <th>Item</th>
             <th>Price</th>
             <th>Description</th>
             <th>Expiration</th>
+            <th>Seller</th>
+            <th>Phone</th>
             <th>Address</th>
             <th>Town</th>
             <th>State</th>
@@ -134,12 +109,12 @@
         </tr>
         {% for seller in seller %}
         <tr>
-            <td>{{ seller.user_name  }}</td>
-            <td>{{ seller.phone  }}</td>
             <td>{{ seller.food  }}</td>
             <td>{{ seller.price  }}</td>
             <td>{{ seller.description }}</td>
             <td>{{ seller.expiration }}</td>
+            <td>{{ seller.user_name  }}</td>
+            <td>{{ seller.phone  }}</td>
             <td>{{ seller.address }}</td>
             <td>{{ seller.town }}</td>
             <td>{{ seller.state }}</td>
