@@ -1,114 +1,149 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for
 from flask_login import login_required, current_user
-from .models import Seller, User
+from .models import Item, User, Buyer, Seller, Cart
 from . import db
-# views.py is basically for the links which the user can see
+
 views = Blueprint('views', __name__)
 # blueprint means it has a bunch of routes inside of it
 
-# this just displays the market
+# this just supports all the pages that aren't related to security, like 
+#sign up and login
 
-
+#backend for the about page
 @views.route('/about', methods=['GET'])
 def about():
     return render_template("about.html", user=current_user)
 
-
+#backend for the market page
+#this will give back custom tables to display to the user using sql commands
+#it will either give back the user's items they are selling and the market
+#or the market with a specific food that they search for
 @views.route('/market', methods=['GET', 'POST'])
 @login_required
 def market():
     if request.method == 'POST':
         food_item = request.form.get('searchfood')
-        # don't do error checks, some boxes can be empty
-        searchresults = db.session.execute(
-            'SELECT S.id, S.food, S.price, S.description, S.expiration, U.user_name, U.address, U.zipcode, U.phone FROM Seller AS S JOIN User AS U WHERE U.id = S.user_id AND S.food = :val', {'val': food_item})
-        # searchresults = Seller.query.filter_by(food=food_item) #okay so search results need to give full table
+        searchresults = db.session.execute('SELECT I.id, I.food, I.price, I.description, I.expiration, U.user_name, U.address, U.zipcode, U.phone, L.town, L.state FROM Location AS L JOIN User AS U JOIN Item AS I WHERE U.zipcode = L.zipcode AND I.user_name = U.user_name AND I.food = :val', {'val': food_item})
         return render_template("market.html", user=current_user, searchresults=searchresults)
 
-    result = db.session.execute(
-        'SELECT S.id, S.food, S.price, S.description, S.expiration, U.user_name, U.address, U.zipcode, U.phone FROM Seller AS S JOIN User AS U WHERE S.user_id = U.id')
-    my_stuff = Seller.query.filter_by(user_id=current_user.id)
+    result = db.session.execute('SELECT I.id, I.food, I.price, I.description, I.expiration, U.user_name, U.address, U.zipcode, U.phone, L.town, L.state FROM Location AS L JOIN User AS U JOIN Item AS I WHERE U.zipcode = L.zipcode AND I.user_name = U.user_name')
+    my_stuff = Item.query.filter_by(user_name=current_user.user_name)
     return render_template("market.html", user=current_user, seller=result, my_stuff=my_stuff)
 
-# views is Blueprint, route to home page
-
-
+#backend for the home page, where the user can put new items on the 
+#market if they have a record in the seller's table, otherwise they are blocked
 @views.route('/', methods=['GET', 'POST'])
 @login_required
 def home():
     if request.method == 'POST':
-        food = request.form.get('food')
-        price = request.form.get('price')
-        description = request.form.get('description')
-        expiration = request.form.get('expiration')
+        can_sell = Seller.query.filter_by(user_name=current_user.user_name).first()
+        if(can_sell != None):
+            food = request.form.get('food')
+            price = request.form.get('price')
+            description = request.form.get('description')
+            expiration = request.form.get('expiration')
 
-        if len(food) < 1:
-            flash('please insert food', category='error')
-        elif len(price) < 1:
-            flash('please give a price', category='error')
-        elif len(description) < 1:
-            flash('please give a description', category='error')
-        elif len(expiration) < 1:
-            flash('please give an expiration date', category='error')
 
+            if len(food) < 1:
+                flash('please insert food', category='error')
+            elif len(price) < 1:
+                flash('please give a price', category='error')
+            elif len(description) < 1:
+                flash('please give a description', category='error')
+            elif len(expiration) < 1:
+                flash('please give an expiration date', category='error')
+            
+            else:
+                new_item = Item(food=food, price=price, description=description,
+                                    expiration=expiration, user_name=can_sell.user_name)
+                db.session.add(new_item)
+                db.session.commit()
+                flash('Item added to market', category='success')
+                return redirect(url_for('views.home'))
         else:
-            new_seller = Seller(food=food, price=price, description=description,
-                                expiration=expiration, user_id=current_user.id)
-            db.session.add(new_seller)
-            db.session.commit()
-            flash('Item added', category='success')
-            return redirect(url_for('views.home'))
+            flash('you don\'t have selling priveledges', category='error')
 
-    # so we can check if authenticated
+    # we always pass the current_user to the front end 
+    # so we can check if authenticated when displaying link and stuff
     return render_template("home.html", user=current_user)
 
+#backend for the buy page, or shopping cart page
+#this just shows you your cart items in a similar way it's shown in the market
+@views.route('/buy')
+@login_required
+def buy():
+    my_cart = db.session.execute('SELECT I.id, I.food, I.price, U.user_name, U.phone, U.address, L.town, L.state FROM Cart AS C JOIN Item AS I JOIN User as U JOIN User as M JOIN Location As L WHERE C.user_name = M.user_name AND C.item_id = I.id AND I.user_name = U.user_name AND U.zipcode = L.zipcode AND M.user_name= :val', {'val': current_user.user_name})
 
+    return render_template("buy.html", user=current_user, my_cart=my_cart)
+
+
+#backend for purchase button
+#this checks if you have a record in the buyer's table to see if you are allowed
+#to buy, then it checks if they are buying their own item, then it lets
+#them add it to their cart and redirects them to the buy page
 @views.route('/purchase/<int:id>')
 def purchase(id):
-    # here i could grab all the seller and buyer info
-    seller_item = db.session.execute(
-        'SELECT S.id, U.id, S.food, S.price, S.description, S.expiration, U.user_name, U.address, U.zipcode, U.phone FROM Seller AS S JOIN User AS U WHERE S.id = :val', {'val': id})
-    # okay, this is so I can add the item to the transaction table
-    # and removing it from the market table
-    # I could manage that in the market backend b/c ill match seller id with
-    # item's seller id and choose to not display it, along with user's own item
-    # okay, so I take from this table the specific places and make them variables,
-    # then add those variables into a database called transactions
-    # i should at least have buyer's id, seller's id, item's id
 
-    return render_template("buy.html", user=current_user, seller_item=seller_item)
+    can_buy = Buyer.query.filter_by(user_name=current_user.user_name).first()
+    if(can_buy != None):
+        #check if they are selling this. 
+        #i have the item's id, so I can query and have the record
+        
+        my_item = Item.query.filter_by(id=id).first()
+        if(my_item.user_name == current_user.user_name):
+            flash('You can\'t buy your own item', category='error')
+            return redirect(url_for('views.home'))
+
+        new_cart = Cart(user_name=current_user.user_name, item_id=id)
+        db.session.add(new_cart)
+        db.session.commit()
+        flash('Item added to cart', category='success')
+        my_cart = db.session.execute('SELECT I.id, I.food, I.price, U.user_name, U.phone, U.address, L.town, L.state FROM Cart AS C JOIN Item AS I JOIN User as U JOIN User as M JOIN Location As L WHERE C.user_name = M.user_name AND C.item_id = I.id AND I.user_name = U.user_name AND U.zipcode = L.zipcode AND M.user_name= :val', {'val': current_user.user_name})
+
+        return render_template("buy.html", user=current_user, my_cart=my_cart)
+    else:
+        flash('you don\'t have buying priveledges', category='error')
+ 
+    result = db.session.execute('SELECT I.id, I.food, I.price, I.description, I.expiration, U.user_name, U.address, U.zipcode, U.phone, L.town, L.state FROM Location AS L JOIN User AS U JOIN Item AS I WHERE U.zipcode = L.zipcode AND I.user_name = U.user_name')
+    my_stuff = Item.query.filter_by(user_name=current_user.user_name)
+    return render_template("market.html", user=current_user, seller=result, my_stuff=my_stuff)
+
+#backend for the checkout button
+#this just deletes the item from the cart table and the item table
+@views.route('/checkout/<int:id>')
+def checkout(id):
+
+    try:
+        Item.query.filter_by(id=id).delete()
+        db.session.commit()
+        Cart.query.filter_by(item_id=id).delete()
+        db.session.commit()
+        flash('Checked out. Enjoy your product', category='success')
+    except:
+        flash('Item has already been checked out or deleted', category='error')
+    return redirect(url_for('views.buy'))
 
 
+
+
+
+#backend for the delete button
+#this deletes the seller's item, and teh button is only displayed to the
+#seller in the market page
 @views.route('/delete/<int:id>')
 def delete(id):
-    seller_to_delete = Seller.query.get_or_404(id)
 
-    if seller_to_delete.user_id == current_user.id:
-        try:
-            db.session.delete(seller_to_delete)
-            db.session.commit()
-            flash('Item deleted', category='success')
-            return redirect(url_for('views.market'))
-        except:
-            flash('Technical problem with deleting item', category='error')
-            return redirect(url_for('views.home'))
-    else:
-        flash('You can only delete your posted items', category='error')
-        return redirect(url_for('views.market'))
-
-
-@views.route('/items', methods=['GET', 'POST'])
-@login_required
-def items():
-    if request.method == 'POST':
-        food_item = request.form.get('searchfood')
-        # don't do error checks, some boxes can be empty
-        searchresults = db.session.execute(
-            'SELECT S.id, S.food, S.price, S.description, S.expiration, U.user_name, U.address, U.zipcode, U.phone FROM Seller AS S JOIN User AS U WHERE U.id = S.user_id AND S.food = :val', {'val': food_item})
-        # searchresults = Seller.query.filter_by(food=food_item) #okay so search results need to give full table
-        return render_template("items.html", user=current_user, searchresults=searchresults)
-
-    result = db.session.execute(
-        'SELECT S.id, S.food, S.price, S.description, S.expiration, U.user_name, U.address, U.zipcode, U.phone FROM Seller AS S JOIN User AS U WHERE S.user_id = U.id')
-    my_stuff = Seller.query.filter_by(user_id=current_user.id)
-    return render_template("items.html", user=current_user, seller=result, my_stuff=my_stuff)
+    try:
+        Item.query.filter_by(id=id).delete()
+        db.session.commit()
+        flash('Item deleted', category='success')
+    except:
+        flash('Item has already been checked out or deleted', category='error')
+    try:
+        Cart.query.filter_by(item_id=id).delete()
+        db.session.commit()
+        flash('Carts emptied of item', category='success')
+    except:
+        flash('No carts had this item', category='success')
+    return redirect(url_for('views.home'))
+    
