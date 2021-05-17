@@ -23,13 +23,7 @@
         padding:5px
       
     }
-    .geeks {
-        border-right:hidden;
-    }
-    .gfg {
-        border-collapse:separate;
-        border-spacing:0 15px;
-    }
+
 </style>
 
 <!--this allows a user to search for a food item-->
@@ -56,12 +50,12 @@
     <h1 style="text-align: center">Search Results</h1>
     <table>  
         <tr>
-            <th>Seller</th>
-            <th>Phone</th>
             <th>Item</th>
-            <th>Price</th>
+            <th>Price</th> 
             <th>Description</th>
             <th>Expiration</th>
+            <th>Seller</th>
+            <th>Phone</th>
             <th>Address</th>
             <th>Town</th>
             <th>State</th>
@@ -71,12 +65,12 @@
         {% for searchresult in searchresults %}
         
         <tr>
-            <td>{{ searchresult.user_name }}</td>
-            <td>{{ searchresult.phone }}</td>
             <td>{{ searchresult.food }}</td>
             <td>{{ searchresult.price }}</td>
             <td>{{ searchresult.description }}</td>
             <td>{{ searchresult.expiration }}</td>
+            <td>{{ searchresult.user_name }}</td>
+            <td>{{ searchresult.phone }}</td>
             <td>{{ searchresult.address }}</td>
             <td>{{ searchresult.town }}</td>
             <td>{{ searchresult.state }}</td>
