@@ -43,7 +43,8 @@
       placeholder="Enter description"
     />
   </div>
-  <!--ask user for password-->
+  <!--ask user for expiration date, some foods have no expiration date,
+      like honey, so a user can put none as well-->
   <div class="form-group">
     <label for="expiration">Expiration date</label>
     <input
@@ -51,10 +52,10 @@
       class="form-control"
       id="expiration"
       name="expiration"
-      placeholder="Enter expiration date"
+      placeholder="Enter expiration date or none if there is none"
     />
   </div>
-  <!-- okay, don't know how to give submit button the Seller id variable-----> 
+  <!-- the submit button takes this form to the backend-----> 
   <br />
   <button type="submit" class="btn btn-primary">Submit</button>
 </form>
