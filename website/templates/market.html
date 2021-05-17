@@ -34,7 +34,9 @@
     border:1px solid black;
     text-align: center;
     }
-
+    .w {
+    width: 130px;
+    }
 </style>
 
 <!--this allows a user to search for a food item-->
@@ -66,7 +68,7 @@
             <th>Description</th>
             <th>Expiration</th>
             <th>Seller</th>
-            <th>Phone</th>
+            <th class="w">Phone</th>
             <th>Address</th>
             <th>Town</th>
             <th>State</th>
@@ -81,7 +83,7 @@
             <td>{{ searchresult.description }}</td>
             <td>{{ searchresult.expiration }}</td>
             <td>{{ searchresult.user_name }}</td>
-            <td>{{ searchresult.phone }}</td>
+            <td class="w">{{ searchresult.phone }}</td>
             <td>{{ searchresult.address }}</td>
             <td>{{ searchresult.town }}</td>
             <td>{{ searchresult.state }}</td>
@@ -106,7 +108,7 @@
             <th>Description</th>
             <th>Expiration</th>
             <th>Seller</th>
-            <th>Phone</th>
+            <th class="w">Phone</th>
             <th>Address</th>
             <th>Town</th>
             <th>State</th>
@@ -119,7 +121,7 @@
             <td>{{ seller.description }}</td>
             <td>{{ seller.expiration }}</td>
             <td>{{ seller.user_name  }}</td>
-            <td>{{ seller.phone  }}</td>
+            <td class="w">{{ seller.phone  }}</td>
             <td>{{ seller.address }}</td>
             <td>{{ seller.town }}</td>
             <td>{{ seller.state }}</td>
