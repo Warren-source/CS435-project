@@ -1,4 +1,4 @@
-# CSCI435-project# rough-project
+# CSCI435-project# project
 
 Warren Ball and Li Gao
 
