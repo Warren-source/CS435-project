@@ -160,15 +160,9 @@ def delete(id):
     return redirect(url_for('views.home'))
 
 
-@views.route('/items', methods=['GET', 'POST'])
+@views.route('/items', methods=['GET'])
 @login_required
 def items():
-    if request.method == 'POST':
-        food_item = request.form.get('searchfood')
-        searchresults = db.session.execute(
-            'SELECT I.id, I.food, I.price, I.description, I.expiration, U.user_name, U.address, U.zipcode, U.phone, L.town, L.state FROM Location AS L JOIN User AS U JOIN Item AS I WHERE U.zipcode = L.zipcode AND I.user_name = U.user_name AND I.food = :val', {'val': food_item})
-        return render_template("items.html", user=current_user, searchresults=searchresults)
-
     result = db.session.execute(
         'SELECT I.id, I.food, I.price, I.description, I.expiration, U.user_name, U.address, U.zipcode, U.phone, L.town, L.state FROM Location AS L JOIN User AS U JOIN Item AS I WHERE U.zipcode = L.zipcode AND I.user_name = U.user_name')
     my_stuff = Item.query.filter_by(user_name=current_user.user_name)
